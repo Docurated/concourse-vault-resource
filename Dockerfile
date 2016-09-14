@@ -8,6 +8,7 @@ RUN apk update && apk add --no-cache \
     ca-certificates \
     jq \
     curl \
+    bash \
     && update-ca-certificates
 
 # Download, unzip the given version of vault and set permissions
