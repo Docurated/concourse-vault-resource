@@ -10,7 +10,7 @@ cat > $payload <&0
 url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
 role=$(jq -r '.source.role // "concourse"' < $payload)
 nonce=$(jq -r '.source.nonce // "vault-concourse-nonce"' < $payload)
-version_path=$(jq -r 'source.version // "version"' < $payload)
+version_path=$(jq -r '.source.version // "version"' < $payload)
 
 token=$(login "${url}" "${role}" "${nonce}")
 version=$(get_secret "${url}" "${token}" "${version_path}" | jq -r '.version')
