@@ -2,15 +2,11 @@
 
 set -e
 
-exec 3>&1 # make stdout available as fd 3 for the result
-exec 1>&2 # redirect all output to stderr for logging
-
 source $(dirname $0)/common.sh
 
 destination=$1
 payload=$(mktemp $TMPDIR/vault-resource-request.XXXXXX)
 cat > $payload <&0
-
 
 url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
 role=$(jq -r '.source.role // "concourse"' < $payload)
@@ -21,9 +17,11 @@ token=$(login "${url}" "${role}" "${nonce}")
 
 for path in "${paths[@]}"; do
     mkdir -p ${destination}/$(dirname ${path})
-    get_secret "${url}" "${path}" "${token}" > ${destination}/${path}.json
+    get_secret "${url}" "${token}" "${path}" "${token}" > ${destination}/${path}.json
 done
 
+version=$(find ${destination} -name "*.json" -type f -print0 | sort -z | xargs -0 sha1sum | sha1sum | cut -d ' ' -f 1)
+
 jq -n "{
-  version: {}
-}" >&3
+  version: ${version}
+}"

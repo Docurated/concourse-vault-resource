@@ -8,6 +8,7 @@ login() {
 
 get_secret() {
     vault_url="$1"
-    path="$2"
-    curl -skL "${vault_url}/v1/secret/${path}" | jq -r '.data'
+    token="$2"
+    path="$3"
+    curl -skL "${vault_url}/v1/secret/${path}" -H "X-Vault-Token: ${token}" | jq -r '.data'
 }
