@@ -21,7 +21,7 @@ for path in "${paths[@]}"; do
     get_secret "${url}" "${token}" "${path}" > ${destination}/${path}.json
 done
 
-version=$(get_secret "${url}" "${token}" "${version_path}" | jq -r '.version')
+version=$(get_secret "${url}" "${token}" "${version_path}")
 jq -n "{
   version: ${version}
 }"
