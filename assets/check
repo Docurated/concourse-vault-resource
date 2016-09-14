@@ -15,4 +15,6 @@ version_path=$(jq -r '.source.version // "version"' < $payload)
 token=$(login "${url}" "${role}" "${nonce}")
 version=$(get_secret "${url}" "${token}" "${version_path}")
 
-echo [\"${version}\"]
+jq -n "[
+  ${version}
+]"
