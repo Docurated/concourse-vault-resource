@@ -1,14 +1,14 @@
 login() {
-    vault_url="$1"
-    vault_role="$2"
-    vault_nonce="$3"
-    curl -skL -XPOST "${vault_url}/v1/auth/aws-ec2/login" -d "{\"role\":\"${vault_role}\",\"pkcs7\":\"$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/pkcs7 | tr -d '\n')\",\"nonce\":\"${vault_nonce}\"}" | \
-        jq -r '.auth.client_token'
+    vault_role="$1"
+    vault_nonce="$2"
+    cert=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/pkcs7 | tr -d '\n')
+    token=$(vault write -format=json auth/aws-ec2/login role=${vault_role} pkcs7=${cert} nonce=${vault_nonce} | jq -r '.auth.client_token')
+    if [ -z "${token}" ]; then
+        echo "ERROR: No token retrieved"
+    fi
+    echo -n "${token}" > ~/.vault-token
 }
 
 get_secret() {
-    vault_url="$1"
-    token="$2"
-    path="$3"
-    curl -skL "${vault_url}/v1/secret/${path}" -H "X-Vault-Token: ${token}" | jq -r '.data'
+    vault read -format=json secret/${1} | jq -r '.data'
 }

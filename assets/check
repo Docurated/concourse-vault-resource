@@ -1,20 +1,6 @@
 #!/bin/bash
 
-set -e
-
-source $(dirname $0)/common.sh
-
-payload=$(mktemp $TMPDIR/vault-resource-check.XXXXXX)
-cat > $payload <&0
-
-url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
-role=$(jq -r '.source.role // "concourse"' < $payload)
-nonce=$(jq -r '.source.nonce // "vault-concourse-nonce"' < $payload)
-version_path=$(jq -r '.source.version // "version"' < $payload)
-
-token=$(login "${url}" "${role}" "${nonce}")
-version=$(get_secret "${url}" "${token}" "${version_path}")
-
+# Always indicate a new version is available by setting the version to the current date
 jq -n "[
-  ${version}
+  {date: \"$(date +%s)\"}
 ]"
