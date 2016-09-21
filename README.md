@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/image/docurated/concourse-vault-resource.svg)](https://microbadger.com/images/docurated/concourse-vault-resource "Get your own image badge on microbadger.com")
+
 # Vault Resource
 
 Reads secrets from [Vault](https://www.vaultproject.io/). Authentication is done using the [aws-ec2 method](https://www.vaultproject.io/docs/auth/aws-ec2.html), which must be configured before using this resource.
