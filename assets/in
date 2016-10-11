@@ -11,7 +11,7 @@ destination=$1
 payload=$(mktemp $TMPDIR/vault-resource-request.XXXXXX)
 cat > $payload <&0
 
-url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
+url=$(jq -r '.source.uri // "https://vault.service.consul:8200"' < $payload)
 skip_verify=$(jq -r '.source.tls_skip_verify // ""' < $payload)
 role=$(jq -r '.source.role // "concourse"' < $payload)
 nonce=$(jq -r '.source.nonce // "vault-concourse-nonce"' < $payload)
