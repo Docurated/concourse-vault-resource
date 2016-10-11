@@ -10,5 +10,5 @@ login() {
 }
 
 get_secret() {
-    vault read -format=json secret/${1} | jq -r '.data'
+    vault read -format=json ${1} | jq -r '.data'
 }
