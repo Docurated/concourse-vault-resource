@@ -38,8 +38,8 @@ Fetching secrets:
 - get: vault
   params:
     paths:
-      - build/git
-      - build/aws/s3
+      - secret/build/git
+      - secret/build/aws/s3
 ```
 
 ## Behavior
