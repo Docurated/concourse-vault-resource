@@ -6,7 +6,7 @@ Reads secrets from [Vault](https://www.vaultproject.io/). Authentication is done
 
 ## Source Configuration
 
-* `uri`: *Optional.* The location of the Vault server. Defaults to `https://vault.service.consul:8200`.
+* `url`: *Optional.* The location of the Vault server. Defaults to `https://vault.service.consul:8200`.
 
 * `role`: *Optional.* The role to authenticate as. Defaults to `concourse`.
 
@@ -27,7 +27,7 @@ resources:
 - name: vault
   type: vault
   source:
-    uri: https://secure.legitcompany.com:8200
+    url: https://secure.legitcompany.com:8200
     role: build-server
     nonce: cantguessme
 ```
