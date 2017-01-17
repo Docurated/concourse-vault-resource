@@ -13,9 +13,14 @@ cat > $payload <&0
 
 url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
 skip_verify=$(jq -r '.source.tls_skip_verify // ""' < $payload)
+paths=($(jq -r '.params.paths // [] | .[]' < $payload))
+auth_method=$(jq -r '.source.auth_method // "aws_ec2"' < $payload)
+# Used for AWS EC2 authentication
 role=$(jq -r '.source.role // "concourse"' < $payload)
 nonce=$(jq -r '.source.nonce // "vault-concourse-nonce"' < $payload)
-paths=($(jq -r '.params.paths // [] | .[]' < $payload))
+# Used for AWS EC2 authentication
+role_id=$(jq -r '.source.role_id // ""' < $payload)
+secret_id=$(jq -r '.source.secret_id // ""' < $payload)
 
 echo "INFO: Reading secrets from: ${paths[*]}"
 
@@ -25,7 +30,11 @@ if [ ! -z "${skip_verify}" ]; then
     export VAULT_SKIP_VERIFY=1
 fi
 
-login ${role} ${nonce}
+if [ "${auth_method}" = "AppRole" ]; then
+    login_approle ${role_id} ${secret_id}
+else
+    login_aws_ec2 ${role} ${nonce}
+fi
 
 for path in "${paths[@]}"; do
     mkdir -p ${destination}/$(dirname ${path})
