@@ -5,6 +5,7 @@ login_aws_ec2() {
     token=$(vault write -format=json auth/aws-ec2/login role=${vault_role} pkcs7=${cert} nonce=${vault_nonce} | jq -r '.auth.client_token')
     if [ -z "${token}" ]; then
         echo "ERROR: No token retrieved"
+	return 1
     fi
     echo -n "${token}" > ~/.vault-token
 }
@@ -15,6 +16,7 @@ login_approle() {
     token=$(vault write -format=json auth/approle/login role_id=${vault_role_id} secret_id=${vault_secret_id} | jq -r '.auth.client_token')
     if [ -z "${token}" ]; then
         echo "ERROR: No token retrieved"
+	return 1
     fi
     echo -n "${token}" > ~/.vault-token
 }
