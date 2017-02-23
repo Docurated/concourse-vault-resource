@@ -13,6 +13,7 @@ cat > $payload <&0
 
 url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
 skip_verify=$(jq -r '.source.tls_skip_verify // ""' < $payload)
+expose_token=$(jq -r '.source.expose_token // ""' < $payload)
 paths=($(jq -r '.params.paths // [] | .[]' < $payload))
 auth_method=$(jq -r '.source.auth_method // "aws_ec2"' < $payload)
 # Used for AWS EC2 authentication
@@ -40,6 +41,10 @@ for path in "${paths[@]}"; do
     mkdir -p ${destination}/$(dirname ${path})
     get_secret ${path} > ${destination}/${path}.json
 done
+
+if [ ! -z "${expose_token}" ]; then
+    cp ~/.vault-token ${destination}/token
+fi
 
 version="{\"date\": \"$(date +%s)\"}"
 jq -n "{

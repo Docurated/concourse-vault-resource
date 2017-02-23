@@ -16,6 +16,8 @@ It can also use the [AppRole method](https://www.vaultproject.io/docs/auth/appro
 * `paths`: *Optional.* If specified (as a list of glob patterns), only changes
   to the specified files will yield new versions from `check`.
   
+* `expose_token`: *Optional.* If specified, this option will expose the token to make it available to other resources
+  
 * `auth_method`: *Optional.* By default will use the `aws-ec2` method. If `AppRole` is specified, it will read the `role_id` and `secret_id` parameter to authenticate on the approle endpoint. 
 
 * `role_id`: *Optional.* Use a specific role id to authenticate. This parameter is used only with `auth_method: AppRole`. 
