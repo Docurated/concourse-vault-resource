@@ -25,7 +25,7 @@ It can also use the [AppRole method](https://www.vaultproject.io/docs/auth/appro
 * `secret_id`: *Optional.* Use a specific secret id to authenticate. This parameter is used only with `auth_method: AppRole`. 
 
 * `tls_skip_verify`: *Optional.* Skips Vault SSL verification by exporting
-  `VAUKT_SKIP_VERIFY=1`.
+  `VAULT_SKIP_VERIFY=1`.
 
 ### Example
 
