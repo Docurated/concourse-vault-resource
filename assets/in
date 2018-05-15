@@ -12,6 +12,7 @@ payload=$(mktemp $TMPDIR/vault-resource-request.XXXXXX)
 cat > $payload <&0
 
 url=$(jq -r '.source.url // "https://vault.service.consul:8200"' < $payload)
+ca_cert=$(jq -r '.source.ca_cert // ""' < $payload)
 skip_verify=$(jq -r '.source.tls_skip_verify // ""' < $payload)
 expose_token=$(jq -r '.source.expose_token // ""' < $payload)
 paths=($(jq -r '.params.paths // [] | .[]' < $payload))
@@ -26,6 +27,12 @@ secret_id=$(jq -r '.source.secret_id // ""' < $payload)
 echo "INFO: Reading secrets from: ${paths[*]}"
 
 export VAULT_ADDR=${url}
+
+if [ -n "${ca_cert}" ]; then
+    export VAULT_CACERT=$(mktemp $TMPDIR/vault-resource-cacert.XXXXXX)
+    echo "${ca_cert}" > ${VAULT_CACERT}
+fi
+
 if [ ! -z "${skip_verify}" ]; then
     echo "WARN: Disabling TLS verification for Vault"
     export VAULT_SKIP_VERIFY=1
