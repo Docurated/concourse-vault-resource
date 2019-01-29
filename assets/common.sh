@@ -22,5 +22,5 @@ login_approle() {
 }
 
 get_secret() {
-    vault read -format=json ${1} | jq -r '.data'
+    vault kv get -format=json ${1} | jq -r '.data'
 }
