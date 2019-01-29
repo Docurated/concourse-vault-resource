@@ -1,7 +1,7 @@
 FROM alpine:latest
 MAINTAINER William Huba <william.huba@docurated.com>
 
-ENV VAULT_VERSION 0.6.1
+ENV VAULT_VERSION 0.10.4
 
 RUN apk update && apk add --no-cache \
     openssl \
